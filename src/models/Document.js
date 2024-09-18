@@ -29,11 +29,11 @@ const DocumentSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-    status: {
-      type: String,
-      enum: ["pending", "approved", "rejected"],
-      default: "pending",
-    },
+    // status: {
+    //   type: String,
+    //   enum: ["pending", "approved", "rejected"],
+    //   default: "pending",
+    // },
     status: {
       type: Boolean,
       default: false,
