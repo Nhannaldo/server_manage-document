@@ -34,6 +34,10 @@ const DocumentSchema = new mongoose.Schema(
       enum: ["pending", "approved", "rejected"],
       default: "pending",
     },
+    status: {
+      type: Boolean,
+      default: false,
+    },
     // ratings: [
     //   {
     //     userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
