@@ -22,8 +22,8 @@ const DocumentSchema = new mongoose.Schema(
       required: true,
     },
     pagenumber: { type: Number, require: true },
-    views: { type: Number, require: true },
-    downloads: { type: Number, require: true },
+    views: { type: Number, require: true, default: 0 },
+    downloads: { type: Number, require: true, default: 0 },
     uploadedBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
