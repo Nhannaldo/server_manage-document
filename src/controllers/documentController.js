@@ -26,22 +26,18 @@ async function createNewDocument(req, res) {
       imageUrl,
       typefileId,
       pagenumber,
-      views,
-      downloads,
       uploadedBy,
-      status,
     } = req.body;
 
     // Validate required fields
     if (
       !title ||
+      !description ||
       !categoryId ||
       !subjectId ||
       !fileUrl ||
+      !imageUrl ||
       !typefileId ||
-      !pagenumber ||
-      !views ||
-      !downloads ||
       !uploadedBy
     ) {
       return res.status(400).json({ message: "Missing required fields" });
@@ -57,10 +53,7 @@ async function createNewDocument(req, res) {
       imageUrl,
       typefileId,
       pagenumber,
-      views,
-      downloads,
       uploadedBy,
-      status, // Defaults to 'pending' if not provided
     });
 
     // Save the document to the database
