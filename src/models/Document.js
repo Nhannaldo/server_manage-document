@@ -48,6 +48,7 @@ const DocumentSchema = new mongoose.Schema(
     sharedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     uploadedAt: { type: Date, default: Date.now },
     approvedAt: { type: Date },
+    size: { type: Number, require: true },
   },
   {
     timestamps: true,
