@@ -88,6 +88,7 @@ const searchDocuments = async (req, res) => {
   }
 };
 
+//filter document
 const filterDocuments = async (req, res) => {
   try {
     const { subjectNames, typefileId, pageCountRange, sortBy } = req.query;
@@ -144,9 +145,28 @@ const filterDocuments = async (req, res) => {
     res.status(500).json({ message: "Error fetching documents", error: err });
   }
 };
+
+// get detail document
+const getDetailDocument = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const documentDetail = await Document.findById(id);
+
+    if (!documentDetail) {
+      return res.status(404).json({ message: "Tài liệu không tồn tại" });
+    }
+    res.status(200).json(documentDetail);
+  } catch (error) {
+    // Xử lý lỗi nếu có
+    console.error(error);
+    res.status(500).json({ message: "Lỗi máy chủ" });
+  }
+};
+
 module.exports = {
   getAllDocument,
   createNewDocument,
   searchDocuments,
   filterDocuments,
+  getDetailDocument,
 };

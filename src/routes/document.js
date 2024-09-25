@@ -5,7 +5,7 @@ const authMiddleware = require("../middlewares/authMiddleware");
 
 router.get("/get-all-document", documentController.getAllDocument);
 router.post("/create-new-document", documentController.createNewDocument);
-
+router.get("/detail/:id", documentController.getDetailDocument);
 //search
 router.get("/search", documentController.searchDocuments);
 
