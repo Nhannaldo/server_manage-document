@@ -69,17 +69,34 @@ async function createNewDocument(req, res) {
 
 // Search documents by title
 const searchDocuments = async (req, res) => {
-  const { q } = req.query; // Get the search term from query parameters
+  const { q, category, typeFile, subject, pageCountRange, sort } = req.query; // Get the search term from query parameters
 
   if (!q) {
     return res.status(400).json({ message: "Title is required for search" });
   }
 
   try {
-    // Perform a case-insensitive search using a regular expression
-    const documents = await Document.find({
-      title: { $regex: q, $options: "i" }, // 'i' makes the search case-insensitive
-    });
+    let query = { title: { $regex: q, $options: "i" } };
+
+    // Add filters if provided
+    if (category) query.categoryId = category;
+    if (typeFile) query.typefileId = typeFile;
+    if (subject) query.subjectId = subject;
+
+    // Add page count range filter
+    if (pageCountRange) {
+      const [min, max] = pageCountRange.split("-");
+      query.pagenumber = {
+        $gte: Number(min),
+        ...(max && { $lte: Number(max) }),
+      };
+    }
+
+    let sortCriteria = {};
+    if (sort === "new") sortCriteria = { createdAt: -1 };
+    if (sort === "downloaded") sortCriteria = { downloads: -1 };
+    if (sort === "viewed") sortCriteria = { views: -1 };
+    const documents = await Document.find(query).sort(sortCriteria);
 
     // Return the matching documents
     res.status(200).json(documents);
