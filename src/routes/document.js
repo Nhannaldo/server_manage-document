@@ -12,4 +12,10 @@ router.get("/search", documentController.searchDocuments);
 //filter page tài liệu môn
 router.get("/filter", documentController.filterDocuments);
 
+// upload
+router.get(
+  "/get-all-document-upload/:userId",
+  documentController.getAllDocumentUpload
+);
+
 module.exports = router;

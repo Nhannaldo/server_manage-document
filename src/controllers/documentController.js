@@ -180,10 +180,34 @@ const getDetailDocument = async (req, res) => {
   }
 };
 
+//upload
+const getAllDocumentUpload = async (req, res) => {
+  const { userId } = req.params;
+  const { status } = req.query;
+  try {
+    const query = { uploadedBy: userId };
+    // Nếu status được truyền, thêm điều kiện lọc theo status
+    if (status !== undefined) {
+      query.status = status === "true"; // Chuyển đổi query string thành boolean
+    }
+    const uploaddocuments = await Document.find(query);
+    if (!uploaddocuments || uploaddocuments.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No documents found for this user" });
+    }
+    res.status(200).json(uploaddocuments);
+  } catch (error) {
+    console.error("Error fetching uploaded documents:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
 module.exports = {
   getAllDocument,
   createNewDocument,
   searchDocuments,
   filterDocuments,
   getDetailDocument,
+  getAllDocumentUpload,
 };
