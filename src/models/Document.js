@@ -6,7 +6,7 @@ const DocumentSchema = new mongoose.Schema(
     description: { type: String },
     categoryId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      ref: "Category",
       required: true,
     },
     subjectId: {
@@ -29,15 +29,15 @@ const DocumentSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-    // status: {
-    //   type: String,
-    //   enum: ["pending", "approved", "rejected"],
-    //   default: "pending",
-    // },
     status: {
-      type: Boolean,
-      default: false,
+      type: String,
+      enum: ["pending", "approved", "rejected", "canceled"],
+      default: "pending",
     },
+    // status: {
+    //   type: Boolean,
+    //   default: false,
+    // },
     // ratings: [
     //   {
     //     userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },

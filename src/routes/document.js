@@ -15,7 +15,18 @@ router.get("/filter", documentController.filterDocuments);
 // upload
 router.get(
   "/get-all-document-upload/:userId",
-  documentController.getAllDocumentUpload
+  documentController.getAllDocumentUploadUser
 );
 
+//admin
+router.get(
+  "/get-all-document-uploaded",
+  documentController.getAllDocumentUploaded
+);
+router.get(
+  "/get-all-document-pending",
+  documentController.getAllDocumentPending
+);
+
+router.put("/approve-document/:id", documentController.ApproveDocumentId);
 module.exports = router;

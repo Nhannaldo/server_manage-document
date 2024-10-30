@@ -181,7 +181,7 @@ const getDetailDocument = async (req, res) => {
 };
 
 //upload
-const getAllDocumentUpload = async (req, res) => {
+const getAllDocumentUploadUser = async (req, res) => {
   const { userId } = req.params;
   const { status } = req.query;
   try {
@@ -203,11 +203,78 @@ const getAllDocumentUpload = async (req, res) => {
   }
 };
 
+//admin
+// Lấy tất cả tài liệu đã tải lên (status = true)
+const getAllDocumentUploaded = async (req, res) => {
+  try {
+    const documents = await Document.find({ status: "approved" });
+    res.status(200).json({
+      success: true,
+      data: documents,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Lỗi khi lấy tài liệu đã tải lên.",
+      error: error.message,
+    });
+  }
+};
+
+// Lấy tất cả tài liệu đang chờ phê duyệt (status = false)
+const getAllDocumentPending = async (req, res) => {
+  try {
+    const documents = await Document.find({ status: "pending" });
+    res.status(200).json({
+      success: true,
+      data: documents,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Lỗi khi lấy tài liệu đang chờ phê duyệt.",
+      error: error.message,
+    });
+  }
+};
+
+const ApproveDocumentId = async (req, res) => {
+  const documentId = req.params.id;
+  try {
+    // Tìm tài liệu dựa trên ID và kiểm tra trạng thái hiện tại
+    const document = await Document.findById(documentId);
+
+    if (!document) {
+      return res.status(404).json({ message: "Document not found" });
+    }
+
+    if (document.status !== "pending") {
+      return res
+        .status(400)
+        .json({ message: "Document is not in a pending state" });
+    }
+
+    // Cập nhật trạng thái tài liệu thành "approved"
+    document.status = "approved";
+    await document.save();
+
+    res.json({
+      message: "Document approved successfully",
+      document: document,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
 module.exports = {
   getAllDocument,
   createNewDocument,
   searchDocuments,
   filterDocuments,
   getDetailDocument,
-  getAllDocumentUpload,
+  getAllDocumentUploadUser,
+  getAllDocumentUploaded,
+  getAllDocumentPending,
+  ApproveDocumentId,
 };
