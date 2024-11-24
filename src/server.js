@@ -8,6 +8,8 @@ const categoryRoutes = require("./routes/category");
 const subjectRoutes = require("./routes/subject");
 const typefileRoutes = require("./routes/typefile");
 const favoriteRoutes = require("./routes/favorite");
+const questionRoutes = require("./routes/question");
+const examRoutes = require("./routes/exam");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 
@@ -37,6 +39,8 @@ app.use("/subject", subjectRoutes);
 // app.use("/v2", uploadRoutes);
 app.use("/category", categoryRoutes);
 app.use("/favorite", favoriteRoutes);
+app.use("/questions", questionRoutes);
+app.use("/exams", examRoutes);
 // Routes
 
 const PORT = process.env.PORT || 5000;

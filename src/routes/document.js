@@ -27,6 +27,8 @@ router.get(
   "/get-all-document-pending",
   documentController.getAllDocumentPending
 );
+router.get("/get-document/:id", documentController.getDocumentById);
 
 router.put("/approve-document/:id", documentController.ApproveDocumentId);
+router.put("/reject-document/:id", documentController.RejectDocumentId);
 module.exports = router;

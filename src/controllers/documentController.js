@@ -5,7 +5,7 @@ const mongoose = require("mongoose");
 
 async function getAllDocument(req, res) {
   try {
-    const allDocuments = await Document.find();
+    const allDocuments = await Document.find({ status: "approved" });
     return res.status(200).json(allDocuments);
   } catch (error) {
     console.error("Error fetching documents:", error);
@@ -188,7 +188,7 @@ const getAllDocumentUploadUser = async (req, res) => {
     const query = { uploadedBy: userId };
     // Nếu status được truyền, thêm điều kiện lọc theo status
     if (status !== undefined) {
-      query.status = status === "true"; // Chuyển đổi query string thành boolean
+      query.status = status;
     }
     const uploaddocuments = await Document.find(query);
     if (!uploaddocuments || uploaddocuments.length === 0) {
@@ -267,6 +267,63 @@ const ApproveDocumentId = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+
+const RejectDocumentId = async (req, res) => {
+  const documentId = req.params.id;
+  try {
+    // Tìm tài liệu dựa trên ID và kiểm tra trạng thái hiện tại
+    const document = await Document.findById(documentId);
+
+    if (!document) {
+      return res.status(404).json({ message: "Document not found" });
+    }
+
+    if (document.status !== "pending") {
+      return res
+        .status(400)
+        .json({ message: "Document is not in a pending state" });
+    }
+
+    // Cập nhật trạng thái tài liệu thành "rejected"
+    document.status = "rejected";
+    await document.save();
+
+    res.json({
+      message: "Document rejected successfully",
+      document: document,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+//
+const getDocumentById = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    // Kiểm tra xem `id` có phải là ObjectId hợp lệ hay không
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: "ID không hợp lệ" });
+    }
+
+    // Tìm tài liệu theo `id`
+    const document = await Document.findById(id).populate(
+      "categoryId subjectId typefileId uploadedBy sharedBy"
+    );
+
+    if (!document) {
+      return res.status(404).json({ message: "Tài liệu không được tìm thấy" });
+    }
+
+    // Trả về tài liệu nếu tìm thấy
+    res.status(200).json(document);
+  } catch (error) {
+    console.error("Lỗi khi lấy tài liệu:", error);
+    res.status(500).json({ message: "Đã xảy ra lỗi máy chủ" });
+  }
+};
 module.exports = {
   getAllDocument,
   createNewDocument,
@@ -277,4 +334,6 @@ module.exports = {
   getAllDocumentUploaded,
   getAllDocumentPending,
   ApproveDocumentId,
+  getDocumentById,
+  RejectDocumentId,
 };
