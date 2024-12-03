@@ -10,6 +10,7 @@ const typefileRoutes = require("./routes/typefile");
 const favoriteRoutes = require("./routes/favorite");
 const questionRoutes = require("./routes/question");
 const examRoutes = require("./routes/exam");
+const reportRoutes = require("./routes/report");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 
@@ -41,6 +42,7 @@ app.use("/category", categoryRoutes);
 app.use("/favorite", favoriteRoutes);
 app.use("/questions", questionRoutes);
 app.use("/exams", examRoutes);
+app.use("/report", reportRoutes);
 // Routes
 
 const PORT = process.env.PORT || 5000;
