@@ -18,6 +18,9 @@ router.get(
   documentController.getAllDocumentUploadUser
 );
 
+//calculate views
+router.post("/increase-view", documentController.IncreaseView);
+
 //admin
 router.get(
   "/get-all-document-uploaded",

@@ -324,6 +324,35 @@ const getDocumentById = async (req, res) => {
     res.status(500).json({ message: "Đã xảy ra lỗi máy chủ" });
   }
 };
+
+const IncreaseView = async (req, res) => {
+  try {
+    const { documentId } = req.body;
+
+    if (!documentId) {
+      return res.status(400).json({ message: "Document ID is required" });
+    }
+
+    // Tìm và tăng view
+    const document = await Document.findByIdAndUpdate(
+      documentId,
+      { $inc: { views: 1 } }, // Tăng views thêm 1
+      { new: true } // Trả về tài liệu đã cập nhật
+    );
+
+    if (!document) {
+      return res.status(404).json({ message: "Document not found" });
+    }
+
+    res.status(200).json({
+      message: "View count updated successfully",
+      document,
+    });
+  } catch (error) {
+    console.error("Error updating view count:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
 module.exports = {
   getAllDocument,
   createNewDocument,
@@ -336,4 +365,5 @@ module.exports = {
   ApproveDocumentId,
   getDocumentById,
   RejectDocumentId,
+  IncreaseView,
 };
