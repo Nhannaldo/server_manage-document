@@ -8,6 +8,7 @@ const categoryRoutes = require("./routes/category");
 const subjectRoutes = require("./routes/subject");
 const typefileRoutes = require("./routes/typefile");
 const favoriteRoutes = require("./routes/favorite");
+const downloadRoutes = require("./routes/download");
 const questionRoutes = require("./routes/question");
 const examRoutes = require("./routes/exam");
 const reportRoutes = require("./routes/report");
@@ -40,9 +41,11 @@ app.use("/subject", subjectRoutes);
 // app.use("/v2", uploadRoutes);
 app.use("/category", categoryRoutes);
 app.use("/favorite", favoriteRoutes);
+app.use("/download", downloadRoutes);
 app.use("/questions", questionRoutes);
 app.use("/exams", examRoutes);
 app.use("/report", reportRoutes);
+
 // Routes
 
 const PORT = process.env.PORT || 5000;

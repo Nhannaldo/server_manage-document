@@ -34,17 +34,6 @@ const DocumentSchema = new mongoose.Schema(
       enum: ["pending", "approved", "rejected", "canceled"],
       default: "pending",
     },
-    // status: {
-    //   type: Boolean,
-    //   default: false,
-    // },
-    // ratings: [
-    //   {
-    //     userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-    //     rating: { type: Number, min: 1, max: 5 },
-    //     comment: { type: String },
-    //   },
-    // ],
     sharedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     uploadedAt: { type: Date, default: Date.now },
     approvedAt: { type: Date },
