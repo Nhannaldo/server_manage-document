@@ -12,6 +12,7 @@ const downloadRoutes = require("./routes/download");
 const questionRoutes = require("./routes/question");
 const examRoutes = require("./routes/exam");
 const reportRoutes = require("./routes/report");
+const statisticRoutes = require("./routes/statistic");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 
@@ -45,6 +46,7 @@ app.use("/download", downloadRoutes);
 app.use("/questions", questionRoutes);
 app.use("/exams", examRoutes);
 app.use("/report", reportRoutes);
+app.use("/statistic", statisticRoutes);
 
 // Routes
 
