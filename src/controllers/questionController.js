@@ -108,8 +108,35 @@ async function createNewQuestionsFromFile(req, res) {
   }
 }
 
+// Function to get all questions by subject
+const getAllQuestionBySubject = async (req, res) => {
+  try {
+    const { subjectId } = req.params; // Lấy môn học từ query parameter
+
+    // Kiểm tra nếu subjectId không có giá trị
+    if (!subjectId) {
+      return res.status(400).json({ message: "Subject ID is required" });
+    }
+
+    // Tìm tất cả câu hỏi với môn học cụ thể
+    const questions = await Question.find({ subject: subjectId });
+
+    if (!questions || questions.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No questions found for this subject" });
+    }
+
+    return res.status(200).json({ questions });
+  } catch (error) {
+    console.error("Error fetching questions:", error);
+    return res.status(500).json({ message: "Server error" });
+  }
+};
+
 module.exports = {
   getAllQuestion,
   createNewQuestion,
   createNewQuestionsFromFile,
+  getAllQuestionBySubject,
 };
