@@ -2,7 +2,7 @@ const Question = require("../models/Question");
 
 async function getAllQuestion(req, res) {
   try {
-    const allQuestions = await Question.find();
+    const allQuestions = await Question.find().populate("subject");
     return res.status(200).json(allQuestions);
   } catch (error) {
     console.error("Error fetching Questions:", error);

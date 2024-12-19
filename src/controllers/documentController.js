@@ -207,7 +207,9 @@ const getAllDocumentUploadUser = async (req, res) => {
 // Lấy tất cả tài liệu đã tải lên (status = true)
 const getAllDocumentUploaded = async (req, res) => {
   try {
-    const documents = await Document.find({ status: "approved" });
+    const documents = await Document.find({ status: "approved" })
+      .populate("subjectId")
+      .populate("uploadedBy");
     res.status(200).json({
       success: true,
       data: documents,
@@ -224,7 +226,9 @@ const getAllDocumentUploaded = async (req, res) => {
 // Lấy tất cả tài liệu đang chờ phê duyệt (status = false)
 const getAllDocumentPending = async (req, res) => {
   try {
-    const documents = await Document.find({ status: "pending" });
+    const documents = await Document.find({ status: "pending" })
+      .populate("subjectId")
+      .populate("uploadedBy");
     res.status(200).json({
       success: true,
       data: documents,

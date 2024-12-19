@@ -2,7 +2,9 @@ const Report = require("../models/Report");
 
 async function getAllReport(req, res) {
   try {
-    const allReports = await Report.find();
+    const allReports = await Report.find()
+      .populate("documentId")
+      .populate("userId");
     return res.status(200).json(allReports);
   } catch (error) {
     console.error("Error fetching Reports:", error);
