@@ -34,10 +34,10 @@ const DocumentSchema = new mongoose.Schema(
       enum: ["pending", "approved", "rejected", "canceled"],
       default: "pending",
     },
-    sharedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     uploadedAt: { type: Date, default: Date.now },
     approvedAt: { type: Date },
     size: { type: Number, require: true },
+    rejectionReason: { type: String, default: null },
   },
   {
     timestamps: true,

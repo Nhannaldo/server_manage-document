@@ -68,4 +68,39 @@ async function getAllStatistic(req, res) {
   }
 }
 
-module.exports = { getAllStatistic };
+async function getUploadDownloadStatistic(req, res) {
+  try {
+    const userStatistics = await Document.aggregate([
+      {
+        $group: {
+          _id: "$uploadedBy",
+          uploadCount: { $sum: 1 },
+          downloadCount: { $sum: "$downloads" },
+        },
+      },
+      {
+        $lookup: {
+          from: "users", // Tên collection của User
+          localField: "_id",
+          foreignField: "_id",
+          as: "userInfo",
+        },
+      },
+      { $unwind: { path: "$userInfo", preserveNullAndEmptyArrays: true } },
+      {
+        $project: {
+          userUsername: "$userInfo.username",
+          uploadCount: 1,
+          downloadCount: 1,
+        },
+      },
+    ]);
+
+    res.status(200).json(userStatistics);
+  } catch (error) {
+    console.error("Error fetching user stats:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+}
+
+module.exports = { getAllStatistic, getUploadDownloadStatistic };

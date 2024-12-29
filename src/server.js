@@ -13,6 +13,7 @@ const questionRoutes = require("./routes/question");
 const examRoutes = require("./routes/exam");
 const reportRoutes = require("./routes/report");
 const statisticRoutes = require("./routes/statistic");
+const notificationRoutes = require("./routes/notification");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 
@@ -27,7 +28,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: ["http://localhost:3000", "http://localhost:3004"],
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
@@ -47,6 +48,7 @@ app.use("/questions", questionRoutes);
 app.use("/exams", examRoutes);
 app.use("/report", reportRoutes);
 app.use("/statistic", statisticRoutes);
+app.use("/notification", notificationRoutes);
 
 // Routes
 

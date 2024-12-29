@@ -2,11 +2,10 @@ const Exam = require("../models/Exam");
 // Function to create a new exam
 const createNewExam = async (req, res) => {
   try {
-    const { level, subjectId, questions } = req.body;
+    const { subjectId, questions } = req.body;
 
     // Create a new Exam document
     const exam = new Exam({
-      level,
       subjectId,
       questions,
     });
@@ -47,6 +46,7 @@ const getAllExamBySubject = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
 const getExamById = async (req, res) => {
   try {
     const { examId } = req.params;
@@ -65,9 +65,53 @@ const getExamById = async (req, res) => {
   }
 };
 
+// Function to update an exam by ID
+const updateExamById = async (req, res) => {
+  try {
+    const { examId } = req.params;
+    const { subjectId, questions } = req.body;
+
+    // Find the exam by ID and update it
+    const exam = await Exam.findByIdAndUpdate(
+      examId,
+      { subjectId, questions },
+      { new: true, runValidators: true }
+    )
+      .populate("subjectId")
+      .populate("questions");
+
+    if (!exam) {
+      return res.status(404).send("Exam not found");
+    }
+
+    res.status(200).json(exam);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+// Function to delete an exam by ID
+const deleteExamById = async (req, res) => {
+  try {
+    const { examId } = req.params;
+
+    // Find the exam by ID and delete it
+    const exam = await Exam.findByIdAndDelete(examId);
+
+    if (!exam) {
+      return res.status(404).send("Exam not found");
+    }
+
+    res.status(200).send("Exam deleted successfully");
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 module.exports = {
   createNewExam,
   getAllExam,
   getAllExamBySubject,
   getExamById,
+  updateExamById,
+  deleteExamById,
 };

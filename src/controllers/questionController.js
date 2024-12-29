@@ -134,9 +134,108 @@ const getAllQuestionBySubject = async (req, res) => {
   }
 };
 
+//update question
+async function updateQuestion(req, res) {
+  try {
+    const { questionId } = req.params;
+    const { question, answers, correctAnswer, subject } = req.body;
+
+    // Validate input
+    if (!question) {
+      return res.status(400).json({ message: "Question text is required." });
+    }
+
+    if (!Array.isArray(answers) || answers.length < 2) {
+      return res
+        .status(400)
+        .json({ message: "Answers array must contain at least two answers." });
+    }
+
+    if (
+      typeof correctAnswer !== "number" ||
+      correctAnswer < 0 ||
+      correctAnswer >= answers.length
+    ) {
+      return res
+        .status(400)
+        .json({ message: "Correct answer index is invalid." });
+    }
+
+    // Find and update the question
+    const updatedQuestion = await Question.findByIdAndUpdate(
+      questionId,
+      { question, answers, correctAnswer, subject },
+      { new: true }
+    );
+
+    if (!updatedQuestion) {
+      return res.status(404).json({ message: "Question not found." });
+    }
+
+    return res.status(200).json(updatedQuestion);
+  } catch (error) {
+    console.error("Error updating question:", error);
+    return res
+      .status(500)
+      .json({ message: "Error updating question", error: error.message });
+  }
+}
+
+async function getQuestionById(req, res) {
+  try {
+    const { questionId } = req.params;
+
+    // Validate input
+    if (!questionId) {
+      return res.status(400).json({ message: "Question ID is required." });
+    }
+
+    // Find the question by ID
+    const question = await Question.findById(questionId).populate("subject");
+
+    if (!question) {
+      return res.status(404).json({ message: "Question not found." });
+    }
+
+    return res.status(200).json(question);
+  } catch (error) {
+    console.error("Error fetching question:", error);
+    return res
+      .status(500)
+      .json({ message: "Error fetching question", error: error.message });
+  }
+}
+async function deleteQuestion(req, res) {
+  try {
+    const { questionId } = req.params;
+
+    // Validate input
+    if (!questionId) {
+      return res.status(400).json({ message: "Question ID is required." });
+    }
+
+    // Find and delete the question
+    const deletedQuestion = await Question.findByIdAndDelete(questionId);
+
+    if (!deletedQuestion) {
+      return res.status(404).json({ message: "Question not found." });
+    }
+
+    return res.status(200).json({ message: "Question deleted successfully." });
+  } catch (error) {
+    console.error("Error deleting question:", error);
+    return res
+      .status(500)
+      .json({ message: "Error deleting question", error: error.message });
+  }
+}
+
 module.exports = {
   getAllQuestion,
   createNewQuestion,
   createNewQuestionsFromFile,
   getAllQuestionBySubject,
+  updateQuestion,
+  getQuestionById,
+  deleteQuestion,
 };
